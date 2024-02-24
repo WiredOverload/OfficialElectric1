@@ -1,6 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://c623e0kfysjid"]
+[gd_scene load_steps=6 format=3 uid="uid://c623e0kfysjid"]
 
 [ext_resource type="Script" path="res://scenes/gameplay.gd" id="1_7m2p3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_njqpd"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yyur0"]
+bg_color = Color(0, 0, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s1onp"]
+bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j6q61"]
+bg_color = Color(0, 0, 0, 1)
 
 [node name="Gameplay" type="Node2D"]
 script = ExtResource("1_7m2p3")
@@ -12,3 +24,48 @@ offset_bottom = 648.0
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 15
+
+[node name="BoxContainer" type="BoxContainer" parent="."]
+offset_right = 612.0
+offset_bottom = 131.0
+
+[node name="RedButton" type="Button" parent="BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_njqpd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_njqpd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_njqpd")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_njqpd")
+theme_override_styles/focus = SubResource("StyleBoxFlat_njqpd")
+
+[node name="BlueButton" type="Button" parent="BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_yyur0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_yyur0")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yyur0")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yyur0")
+theme_override_styles/focus = SubResource("StyleBoxFlat_yyur0")
+
+[node name="GreenButton" type="Button" parent="BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_s1onp")
+theme_override_styles/hover = SubResource("StyleBoxFlat_s1onp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_s1onp")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_s1onp")
+theme_override_styles/focus = SubResource("StyleBoxFlat_s1onp")
+
+[node name="BlackButton" type="Button" parent="BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_j6q61")
+theme_override_styles/hover = SubResource("StyleBoxFlat_j6q61")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_j6q61")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_j6q61")
+theme_override_styles/focus = SubResource("StyleBoxFlat_j6q61")
+
+[connection signal="pressed" from="BoxContainer/RedButton" to="." method="_on_red_button_pressed"]
+[connection signal="pressed" from="BoxContainer/BlueButton" to="." method="_on_blue_button_pressed"]
+[connection signal="pressed" from="BoxContainer/GreenButton" to="." method="_on_green_button_pressed"]
+[connection signal="pressed" from="BoxContainer/BlackButton" to="." method="_on_black_button_pressed"]

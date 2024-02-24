@@ -13,7 +13,17 @@ var squareScene = preload("res://UI/pixel_square.tscn")
 var selected_color := Color.RED
 var old_color = null
 
+var current_subject := ""
 var current_request
+var request_num := 0
+
+var available_subjects := [
+	"a man with a hat",
+	"a fluffy cat",
+	"the Mona Lisa",
+	"a cool tech giant logo",
+	"your fursona",
+]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -25,7 +35,7 @@ func _ready() -> void:
 		square.mouse_exited.connect(exit_square.bind(square))
 		grid.add_child(square)
 	
-	start_request()
+	#start_request()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,7 +46,6 @@ func _process(delta: float) -> void:
 func draw_color(event: InputEvent, square: ColorRect) -> void:
 	if event != null && !event.is_action("mouse_click"):
 		return
-	print("try draw")
 	if Input.is_mouse_button_pressed(1):
 		square.color = selected_color
 		old_color = null
@@ -68,8 +77,17 @@ func grade_submission() -> void:
 	$PlaceholderScoreLabel.text = str(roundi(score * 100))
 
 func next_request() -> void:
-	grade_submission()
-	start_request()
+	if request_num == 0:
+		current_subject = available_subjects.pick_random()
+		request_label.text = "I want you to draw me " + current_subject
+		request_label.visible_ratio = 0.0
+		create_tween().tween_property(request_label, "visible_ratio", 1.0, 1.0 / TEXT_SPEED)
+	elif request_num == 1:
+		start_request()
+	elif request_num > 1:
+		grade_submission()
+		start_request()
+	request_num += 1
 
 func _on_red_button_pressed() -> void:
 	selected_color = Color.RED

@@ -92,6 +92,10 @@ theme_override_constants/margin_bottom = 8
 unique_name_in_owner = true
 layout_mode = 2
 bbcode_enabled = true
+text = "This man ^^^ is your client. 
+He'll ask for a drawing and maybe a few modifications after.
+The better you follow his instructions, the happier he'll be!
+"
 visible_characters_behavior = 1
 
 [node name="SubmitButton" type="Button" parent="VBoxContainer"]

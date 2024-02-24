@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://c623e0kfysjid"]
+[gd_scene load_steps=7 format=3 uid="uid://c623e0kfysjid"]
 
 [ext_resource type="Script" path="res://scenes/gameplay.gd" id="1_7m2p3"]
+[ext_resource type="Texture2D" uid="uid://2puskrrfbs7r" path="res://npc.png" id="2_2xktd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_njqpd"]
 bg_color = Color(1, 0, 0, 1)
@@ -65,7 +66,47 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_j6q61")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_j6q61")
 theme_override_styles/focus = SubResource("StyleBoxFlat_j6q61")
 
+[node name="NpcPortrait" type="Sprite2D" parent="."]
+position = Vector2(893, 229)
+scale = Vector2(3.11719, 3.11719)
+texture = ExtResource("2_2xktd")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 642.0
+offset_top = 347.0
+offset_right = 1141.0
+offset_bottom = 639.0
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="RequestLabel" type="RichTextLabel" parent="VBoxContainer/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+bbcode_enabled = true
+visible_characters_behavior = 1
+
+[node name="SubmitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Submit"
+
+[node name="PlaceholderScoreLabel" type="Label" parent="."]
+offset_left = 987.0
+offset_top = 10.0
+offset_right = 1144.0
+offset_bottom = 41.0
+text = "0"
+
 [connection signal="pressed" from="BoxContainer/RedButton" to="." method="_on_red_button_pressed"]
 [connection signal="pressed" from="BoxContainer/BlueButton" to="." method="_on_blue_button_pressed"]
 [connection signal="pressed" from="BoxContainer/GreenButton" to="." method="_on_green_button_pressed"]
 [connection signal="pressed" from="BoxContainer/BlackButton" to="." method="_on_black_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SubmitButton" to="." method="_on_submit_button_pressed"]

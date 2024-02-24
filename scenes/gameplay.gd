@@ -10,7 +10,8 @@ var squareScene = preload("res://UI/pixel_square.tscn")
 @onready var grid = $GridContainer
 @onready var request_label: RichTextLabel = %RequestLabel
 
-var selectedColor = Color.RED
+var selected_color := Color.RED
+var old_color = null
 
 var current_request
 
@@ -19,7 +20,9 @@ func _ready() -> void:
 	var square: ColorRect
 	for i in range(15*15):
 		square = squareScene.instantiate()
-		square.mouse_entered.connect(draw_color.bind(square))
+		square.mouse_entered.connect(draw_color.bind(null, square))
+		square.gui_input.connect(draw_color.bind(square))
+		square.mouse_exited.connect(exit_square.bind(square))
 		grid.add_child(square)
 	
 	start_request()
@@ -30,9 +33,21 @@ func _process(delta: float) -> void:
 	pass
 
 
-func draw_color(square: ColorRect) -> void:
+func draw_color(event: InputEvent, square: ColorRect) -> void:
+	if event != null && !event.is_action("mouse_click"):
+		return
+	print("try draw")
 	if Input.is_mouse_button_pressed(1):
-		square.color = selectedColor
+		square.color = selected_color
+		old_color = null
+	else:
+		old_color = square.color
+		square.color = selected_color
+
+func exit_square(square: ColorRect) -> void:
+	if old_color != null:
+		square.color = old_color
+		old_color = null
 
 func get_image() -> Image:
 	var image := Image.create(15, 15, false, Image.FORMAT_RGB8)
@@ -57,16 +72,16 @@ func next_request() -> void:
 	start_request()
 
 func _on_red_button_pressed() -> void:
-	selectedColor = Color.RED
+	selected_color = Color.RED
 
 func _on_blue_button_pressed() -> void:
-	selectedColor = Color.BLUE
+	selected_color = Color.BLUE
 
 func _on_green_button_pressed() -> void:
-	selectedColor = Color.GREEN
+	selected_color = Color.GREEN
 
 func _on_black_button_pressed() -> void:
-	selectedColor = Color.BLACK
+	selected_color = Color.BLACK
 
 func _on_submit_button_pressed() -> void:
 	next_request()

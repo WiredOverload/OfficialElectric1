@@ -16,6 +16,7 @@ var old_color = null
 var current_subject := ""
 var current_request
 var request_num := 0
+var request_target_num := 10 + 1
 
 var available_subjects := [
 	"a man with a hat",
@@ -25,10 +26,18 @@ var available_subjects := [
 	"your fursona",
 ]
 
+var starting_phrases := [
+	"That looks great, but ",
+	"Fantastic work, but ",
+	"Great! Now ",
+	"Alright, now ",
+	"Hmmmm, ",
+]
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var square: ColorRect
-	for i in range(15*15):
+	for i in range(16*16):
 		square = squareScene.instantiate()
 		square.mouse_entered.connect(draw_color.bind(null, square))
 		square.gui_input.connect(draw_color.bind(square))
@@ -59,15 +68,15 @@ func exit_square(square: ColorRect) -> void:
 		old_color = null
 
 func get_image() -> Image:
-	var image := Image.create(15, 15, false, Image.FORMAT_RGB8)
-	for i in range(15*15):
-		image.set_pixel(i % 15, i / 15, grid.get_child(i).color)
+	var image := Image.create(16, 16, false, Image.FORMAT_RGB8)
+	for i in range(16*16):
+		image.set_pixel(i % 16, i / 16, grid.get_child(i).color)
 	return image
 
 func start_request() -> void:
 	var script: Script = requests.pick_random()
 	current_request = script.new()
-	request_label.text = current_request.get_text()
+	request_label.text = starting_phrases.pick_random() + current_request.get_text()
 	request_label.visible_ratio = 0.0
 	create_tween().tween_property(request_label, "visible_ratio", 1.0, 1.0 / TEXT_SPEED)
 
@@ -75,6 +84,12 @@ func grade_submission() -> void:
 	assert(current_request)
 	var score = current_request.grade(get_image())
 	$PlaceholderScoreLabel.text = str(roundi(score * 100))
+
+func final_submission():
+	request_label.text = "Yep, that sure is " + current_subject
+	request_label.visible_ratio = 0.0
+	create_tween().tween_property(request_label, "visible_ratio", 1.0, 1.0 / TEXT_SPEED)
+	$VBoxContainer/SubmitButton.text = "Restart"
 
 func next_request() -> void:
 	if request_num == 0:
@@ -84,7 +99,10 @@ func next_request() -> void:
 		create_tween().tween_property(request_label, "visible_ratio", 1.0, 1.0 / TEXT_SPEED)
 	elif request_num == 1:
 		start_request()
-	elif request_num > 1:
+	elif request_num == request_target_num:
+		grade_submission()
+		final_submission()
+	else:
 		grade_submission()
 		start_request()
 	request_num += 1
@@ -102,4 +120,7 @@ func _on_black_button_pressed() -> void:
 	selected_color = Color.BLACK
 
 func _on_submit_button_pressed() -> void:
-	next_request()
+	if request_num == request_target_num:
+		get_tree().reload_current_scene()
+	else:
+		next_request()

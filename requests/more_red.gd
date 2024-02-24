@@ -1,7 +1,7 @@
 extends RefCounted
 
 func get_text() -> String:
-	return "Can you make it more [color=red][shake]red[/shake][/color]?"
+	return "can you make it more [color=red][shake]red[/shake][/color]?"
 
 func grade(img: Image) -> float:
 	var s := img.get_size()

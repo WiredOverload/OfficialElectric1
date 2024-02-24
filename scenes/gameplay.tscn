@@ -24,7 +24,7 @@ offset_right = 616.0
 offset_bottom = 648.0
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
-columns = 15
+columns = 16
 
 [node name="BoxContainer" type="BoxContainer" parent="."]
 offset_right = 612.0

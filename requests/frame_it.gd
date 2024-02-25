@@ -3,7 +3,7 @@ extends RefCounted
 func get_text() -> String:
 	return "I want a nice clean frame!"
 
-func grade(img: Image) -> float:
+func grade(img: Image, old: Image) -> float:
 	var s := img.get_size()
 	var streaks := []
 	var colors := {}

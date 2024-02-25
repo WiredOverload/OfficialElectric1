@@ -142,7 +142,7 @@ func start_request() -> void:
 
 func grade_submission() -> void:
 	assert(current_request)
-	last_satisfaction = current_request.grade(get_image())
+	last_satisfaction = current_request.grade(get_image(), request_history.back())
 	satisfaction += last_satisfaction
 	#var score = current_request.grade(get_image())
 	#$PlaceholderScoreLabel.text = str(roundi(score * 100))

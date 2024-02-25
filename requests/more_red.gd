@@ -13,4 +13,4 @@ func grade(img: Image) -> float:
 	return 1 if (float(count) / float(s.x * s.y)) > .3 else -1
 
 func _get_color() -> Color:
-	return Color.RED
+	return Palette.RED

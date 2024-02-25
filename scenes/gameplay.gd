@@ -143,6 +143,8 @@ func set_selected_color(c: Color) -> void:
 	palette_rects[Palette.color_name(selected_color)].get_parent().theme_type_variation = &"PanelBorderOff"
 	selected_color = c
 	palette_rects[Palette.color_name(selected_color)].get_parent().theme_type_variation = &"PanelBorderOn"
+	for k in tool_buttons:
+		tool_buttons[k].get_node("Color").modulate = selected_color
 
 func set_current_tool(t: Tool) -> void:
 	tool_buttons[Tool.find_key(current_tool)].get_parent().theme_type_variation = &"PanelBorderOff"

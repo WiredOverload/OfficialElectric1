@@ -19,6 +19,7 @@ var requests: Array[Script] = [
 	preload("res://requests/more_rats.gd"),
 	preload("res://requests/more_twitter.gd"),
 	preload("res://requests/mirror.gd"),
+	preload("res://requests/actually_nevermind.gd"),
 ]
 
 var request_sfx := [
@@ -135,7 +136,11 @@ func get_image() -> Image:
 
 func start_request() -> void:
 	request_history.append(current_image.duplicate())
-	var script: Script = requests.pick_random()
+	var script: Script = requests.filter(func (r: Script):
+		if not r.has_method(&"can_be_picked"):
+			return true
+		return r.can_be_picked(request_history)
+	).pick_random()
 	current_request = script.new()
 	if last_satisfaction > 0:
 		request_label.text = positive_starting_phrases.pick_random() + current_request.get_text()
@@ -146,7 +151,8 @@ func start_request() -> void:
 
 func grade_submission() -> void:
 	assert(current_request)
-	last_satisfaction = current_request.grade(get_image(), request_history.back())
+	last_satisfaction = current_request.grade(get_image(), request_history)
+	print("last_satisfaction = ", last_satisfaction)
 	satisfaction += last_satisfaction
 	#var score = current_request.grade(get_image())
 	#$PlaceholderScoreLabel.text = str(roundi(score * 100))

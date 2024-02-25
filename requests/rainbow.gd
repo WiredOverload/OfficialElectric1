@@ -3,7 +3,7 @@ extends RefCounted
 func get_text() -> String:
 	return "can you make it more [rainbow]colorful[/rainbow]?"
 
-func grade(img: Image, old: Image) -> float:
+func grade(img: Image, history: Array[Image]) -> float:
 	var color_counts := {
 		Palette.RED: 0,
 		Palette.BLUE: 0,

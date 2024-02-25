@@ -3,7 +3,17 @@ extends RefCounted
 func get_text() -> String:
 	return "can you make it more rat-like?"
 
-func grade(img: Image, old: Image) -> float:
+func grade(img: Image, history: Array[Image]) -> float:
+	var color_counts := {
+		Palette.RED: 0,
+		Palette.BLUE: 0,
+		Palette.BROWN: 0,
+		Palette.GREEN: 0,
+		Palette.MAGENTA: 0,
+		#Palette.BLACK: 0,
+		#Palette.WHITE: 0,
+		Palette.YELLOW: 0,
+	}
 	
 	var s := img.get_size()
 	var diff_count := 0
@@ -12,7 +22,7 @@ func grade(img: Image, old: Image) -> float:
 	for y in s.y:
 		for x in s.x:
 			pixel = img.get_pixel(x, y)
-			old_pixel = old.get_pixel(x, y)
+			old_pixel = history.back().get_pixel(x, y)
 			if pixel != old_pixel:
 				diff_count += 1
 	return 1 if diff_count > 24 else -1

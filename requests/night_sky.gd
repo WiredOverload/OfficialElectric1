@@ -3,7 +3,7 @@ extends RefCounted
 func get_text() -> String:
 	return "I want it to look more like the night sky!"
 
-func grade(img: Image, old: Image) -> float:
+func grade(img: Image, history: Array[Image]) -> float:
 	var star_count := 0
 	
 	var s := img.get_size()

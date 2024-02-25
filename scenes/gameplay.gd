@@ -15,6 +15,7 @@ var requests: Array[Script] = [
 	preload("res://requests/more_blue.gd"),
 	preload("res://requests/frame_it.gd"),
 	preload("res://requests/rainbow.gd"),
+	preload("res://requests/night_sky.gd"),
 ]
 
 var request_sfx := [
@@ -144,8 +145,9 @@ func grade_submission() -> void:
 	#$PlaceholderScoreLabel.text = str(roundi(score * 100))
 
 func final_submission():
-	request_label.text = "Yep, that sure is " + current_subject + ".\n" + (
-		"You were terrible to work with though" if satisfaction < 0 else "I'm glad you liked all my ideas!")
+	request_label.text = "Well, not sure that still looks like " + current_subject + (
+		", but that's probably because you kept ignoring my suggestions." if satisfaction < 0 else 
+		", but I'm glad you liked all my ideas!")
 	request_label.visible_ratio = 0.0
 	create_tween().tween_property(request_label, "visible_ratio", 1.0, 1.0 / TEXT_SPEED)
 	$VBoxContainer/SubmitButton.text = "Restart"

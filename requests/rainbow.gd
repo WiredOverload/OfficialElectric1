@@ -24,6 +24,3 @@ func grade(img: Image) -> float:
 			if pixel != Color(0, 0, 0, 0) && pixel != Palette.BLACK && pixel != Palette.WHITE:
 				color_counts[img.get_pixel(x, y)] += 1
 	return 1 if color_counts.values().all(func(x): x > 24) else -1
-
-func _get_color() -> Color:
-	return Palette.RED

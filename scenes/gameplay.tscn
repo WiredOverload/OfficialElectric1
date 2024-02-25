@@ -1,70 +1,124 @@
-[gd_scene load_steps=7 format=3 uid="uid://c623e0kfysjid"]
+[gd_scene load_steps=5 format=3 uid="uid://c623e0kfysjid"]
 
 [ext_resource type="Script" path="res://scenes/gameplay.gd" id="1_7m2p3"]
 [ext_resource type="Texture2D" uid="uid://2puskrrfbs7r" path="res://npc.png" id="2_2xktd"]
+[ext_resource type="Texture2D" uid="uid://by03t35t6g56g" path="res://canvas.png" id="2_jr151"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_njqpd"]
-bg_color = Color(1, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yyur0"]
-bg_color = Color(0, 0, 1, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s1onp"]
-bg_color = Color(0, 1, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j6q61"]
-bg_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sqs6t"]
+texture = ExtResource("2_jr151")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
 
 [node name="Gameplay" type="Node2D"]
 script = ExtResource("1_7m2p3")
 
-[node name="GridContainer" type="GridContainer" parent="."]
-offset_top = 184.0
-offset_right = 616.0
-offset_bottom = 648.0
+[node name="Canvas" type="PanelContainer" parent="."]
+offset_left = 67.0
+offset_top = 158.0
+offset_right = 547.0
+offset_bottom = 638.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_sqs6t")
+metadata/_edit_group_ = true
+
+[node name="PixelGrid" type="GridContainer" parent="Canvas"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 16
 
-[node name="BoxContainer" type="BoxContainer" parent="."]
-offset_right = 612.0
-offset_bottom = 131.0
+[node name="Palette" type="VBoxContainer" parent="."]
+offset_left = 101.0
+offset_top = 11.0
+offset_right = 521.0
+offset_bottom = 151.0
 
-[node name="RedButton" type="Button" parent="BoxContainer"]
+[node name="TopRow" type="HBoxContainer" parent="Palette"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PaletteBorder" type="PanelContainer" parent="Palette/TopRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_njqpd")
-theme_override_styles/hover = SubResource("StyleBoxFlat_njqpd")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_njqpd")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_njqpd")
-theme_override_styles/focus = SubResource("StyleBoxFlat_njqpd")
+theme_type_variation = &"PanelBorderOff"
 
-[node name="BlueButton" type="Button" parent="BoxContainer"]
+[node name="PaletteRed" type="ColorRect" parent="Palette/TopRow/PaletteBorder"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+
+[node name="PaletteBorder2" type="PanelContainer" parent="Palette/TopRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_yyur0")
-theme_override_styles/hover = SubResource("StyleBoxFlat_yyur0")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_yyur0")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_yyur0")
-theme_override_styles/focus = SubResource("StyleBoxFlat_yyur0")
+theme_type_variation = &"PanelBorderOff"
 
-[node name="GreenButton" type="Button" parent="BoxContainer"]
+[node name="PaletteGreen" type="ColorRect" parent="Palette/TopRow/PaletteBorder2"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0, 1, 0, 1)
+
+[node name="PaletteBorder3" type="PanelContainer" parent="Palette/TopRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_s1onp")
-theme_override_styles/hover = SubResource("StyleBoxFlat_s1onp")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_s1onp")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_s1onp")
-theme_override_styles/focus = SubResource("StyleBoxFlat_s1onp")
+theme_type_variation = &"PanelBorderOff"
 
-[node name="BlackButton" type="Button" parent="BoxContainer"]
+[node name="PaletteBlue" type="ColorRect" parent="Palette/TopRow/PaletteBorder3"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0, 0, 1, 1)
+
+[node name="PaletteBorder4" type="PanelContainer" parent="Palette/TopRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_j6q61")
-theme_override_styles/hover = SubResource("StyleBoxFlat_j6q61")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_j6q61")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_j6q61")
-theme_override_styles/focus = SubResource("StyleBoxFlat_j6q61")
+theme_type_variation = &"PanelBorderOff"
+
+[node name="PaletteWhite" type="ColorRect" parent="Palette/TopRow/PaletteBorder4"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="BottomRow" type="HBoxContainer" parent="Palette"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PaletteBorder" type="PanelContainer" parent="Palette/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelBorderOff"
+
+[node name="PaletteCyan" type="ColorRect" parent="Palette/BottomRow/PaletteBorder"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0, 1, 1, 1)
+
+[node name="PaletteBorder2" type="PanelContainer" parent="Palette/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelBorderOff"
+
+[node name="PaletteMagenta" type="ColorRect" parent="Palette/BottomRow/PaletteBorder2"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(1, 0, 1, 1)
+
+[node name="PaletteBorder3" type="PanelContainer" parent="Palette/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelBorderOff"
+
+[node name="PaletteYellow" type="ColorRect" parent="Palette/BottomRow/PaletteBorder3"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(1, 1, 0, 1)
+
+[node name="PaletteBorder4" type="PanelContainer" parent="Palette/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelBorderOff"
+
+[node name="PaletteBlack" type="ColorRect" parent="Palette/BottomRow/PaletteBorder4"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0, 0, 0, 1)
 
 [node name="NpcPortrait" type="Sprite2D" parent="."]
 position = Vector2(893, 229)
@@ -110,8 +164,4 @@ offset_right = 1144.0
 offset_bottom = 41.0
 text = "0"
 
-[connection signal="pressed" from="BoxContainer/RedButton" to="." method="_on_red_button_pressed"]
-[connection signal="pressed" from="BoxContainer/BlueButton" to="." method="_on_blue_button_pressed"]
-[connection signal="pressed" from="BoxContainer/GreenButton" to="." method="_on_green_button_pressed"]
-[connection signal="pressed" from="BoxContainer/BlackButton" to="." method="_on_black_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/SubmitButton" to="." method="_on_submit_button_pressed"]

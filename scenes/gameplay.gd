@@ -1,16 +1,31 @@
 extends Node2D
 
 const TEXT_SPEED = 1.0
+const IMAGE_SIZE = 24
 
 var requests: Array[Script] = [
-	preload("res://requests/more_red.gd")
+	preload("res://requests/more_red.gd"),
+	preload("res://requests/more_green.gd"),
+	preload("res://requests/more_blue.gd"),
+	preload("res://requests/frame_it.gd"),
 ]
 
 var squareScene = preload("res://UI/pixel_square.tscn")
-@onready var grid = $GridContainer
+@onready var grid = %PixelGrid
 @onready var request_label: RichTextLabel = %RequestLabel
 
-var selected_color := Color.RED
+@onready var palette_rects := {
+	RED = %PaletteRed,
+	GREEN = %PaletteGreen,
+	BLUE = %PaletteBlue,
+	WHITE = %PaletteWhite,
+	CYAN = %PaletteCyan,
+	MAGENTA = %PaletteMagenta,
+	YELLOW = %PaletteYellow,
+	BLACK = %PaletteBlack,
+}
+
+var selected_color := Palette.RED: set = set_selected_color
 var old_color = null
 
 var current_subject := ""
@@ -37,9 +52,15 @@ var starting_phrases := [
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var square: ColorRect
-	for i in range(16*16):
-		square = squareScene.instantiate()
+	selected_color = selected_color
+	
+	for c in palette_rects:
+		palette_rects[c].color = Palette[c]
+		palette_rects[c].gui_input.connect(_on_palette_gui_input.bind(palette_rects[c]))
+	
+	grid.columns = IMAGE_SIZE
+	for i in range(IMAGE_SIZE*IMAGE_SIZE):
+		var square: ColorRect = squareScene.instantiate()
 		square.mouse_entered.connect(draw_color.bind(null, square))
 		square.gui_input.connect(draw_color.bind(square))
 		square.mouse_exited.connect(exit_square.bind(square))
@@ -69,9 +90,9 @@ func exit_square(square: ColorRect) -> void:
 		old_color = null
 
 func get_image() -> Image:
-	var image := Image.create(16, 16, false, Image.FORMAT_RGB8)
-	for i in range(16*16):
-		image.set_pixel(i % 16, i / 16, grid.get_child(i).color)
+	var image := Image.create(IMAGE_SIZE, IMAGE_SIZE, false, Image.FORMAT_RGB8)
+	for i in range(IMAGE_SIZE*IMAGE_SIZE):
+		image.set_pixel(i % IMAGE_SIZE, i / IMAGE_SIZE, grid.get_child(i).color)
 	return image
 
 func start_request() -> void:
@@ -110,17 +131,15 @@ func next_request() -> void:
 		start_request()
 	request_num += 1
 
-func _on_red_button_pressed() -> void:
-	selected_color = Color.RED
+func set_selected_color(c: Color) -> void:
+	palette_rects[Palette.color_name(selected_color)].get_parent().theme_type_variation = &"PanelBorderOff"
+	selected_color = c
+	palette_rects[Palette.color_name(selected_color)].get_parent().theme_type_variation = &"PanelBorderOn"
 
-func _on_blue_button_pressed() -> void:
-	selected_color = Color.BLUE
-
-func _on_green_button_pressed() -> void:
-	selected_color = Color.GREEN
-
-func _on_black_button_pressed() -> void:
-	selected_color = Color.BLACK
+func _on_palette_gui_input(event: InputEvent, palette_rect: ColorRect) -> void:
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			selected_color = palette_rect.color
 
 func _on_submit_button_pressed() -> void:
 	if request_num == request_target_num:

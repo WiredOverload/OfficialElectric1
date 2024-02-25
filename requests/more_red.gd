@@ -8,7 +8,9 @@ func grade(img: Image) -> float:
 	var count := 0
 	for y in s.y:
 		for x in s.x:
-			if img.get_pixel(x, y) == Color.RED:
+			if img.get_pixel(x, y) == _get_color():
 				count += 1
 	return 1 if (float(count) / float(s.x * s.y)) > .3 else -1
 
+func _get_color() -> Color:
+	return Color.RED

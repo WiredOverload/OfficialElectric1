@@ -35,6 +35,7 @@ var squareScene = preload("res://UI/pixel_square.tscn")
 	PENCIL = %PencilToolButton,
 	BRUSH = %BrushToolButton,
 	BUCKET = %BucketToolButton,
+	UNDO = %UndoButton,
 }
 
 var selected_color := Palette.RED: set = set_selected_color
@@ -43,6 +44,9 @@ var old_color = null
 var current_tool: Tool = Tool.PENCIL: set = set_current_tool
 
 var current_image: Image
+
+var undo_history: Array[Image]
+var request_history: Array[Image]
 
 var current_subject := ""
 var current_request
@@ -91,10 +95,10 @@ func _ready() -> void:
 	#start_request()
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.pressed and event.ctrl_pressed and event.keycode == KEY_Z:
+			_undo()
 
 func draw_color(event: InputEvent, square: ColorRect) -> void:
 	if event != null && !event.is_action("mouse_click"):
@@ -139,7 +143,9 @@ func final_submission():
 	$VBoxContainer/SubmitButton.text = "Restart"
 
 func next_request() -> void:
+	undo_history.clear()
 	if request_num == 0:
+		request_history.clear()
 		current_subject = available_subjects.pick_random()
 		request_label.text = "I want you to draw me " + current_subject
 		request_label.visible_ratio = 0.0
@@ -182,53 +188,39 @@ func _canvas_to_pixel(canvas_coord: Vector2) -> Vector2i:
 
 func _on_canvas_gui_input(event: InputEvent) -> void:
 	match current_tool:
-		Tool.PENCIL:
+		Tool.PENCIL, Tool.BRUSH:
 			if event is InputEventMouseButton:
 				if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+					_push_history()
 					var where := _canvas_to_pixel(event.position)
 					current_image.set_pixelv(where, selected_color)
-					_update_canvas_image()
-			
-			if event is InputEventMouseMotion:
-				if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
-					var from := Vector2(_canvas_to_pixel(event.position - event.relative))
-					var to := Vector2(_canvas_to_pixel(event.position))
-					var n := maxi(absi(to.x - from.x), absi(to.y - from.y))
-					for i: int in n + 1:
-						var where := Vector2i(from.lerp(to, float(i) / float(n)).round())
-						if Rect2i(0, 0, IMAGE_SIZE, IMAGE_SIZE).has_point(where):
-							current_image.set_pixelv(where, selected_color)
-					_update_canvas_image()
-		
-		Tool.BRUSH:
-			if event is InputEventMouseButton:
-				if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-					var where := _canvas_to_pixel(event.position)
-					current_image.set_pixelv(where, selected_color)
-					for d: Vector2i in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
-						var p := where + d
-						if Rect2i(0, 0, IMAGE_SIZE, IMAGE_SIZE).has_point(p):
-							current_image.set_pixelv(p, selected_color)
-					_update_canvas_image()
-			
-			if event is InputEventMouseMotion:
-				if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
-					var from := Vector2(_canvas_to_pixel(event.position - event.relative))
-					var to := Vector2(_canvas_to_pixel(event.position))
-					var n := maxi(absi(to.x - from.x), absi(to.y - from.y))
-					for i: int in n + 1:
-						var where := Vector2i(from.lerp(to, float(i) / float(n)).round())
-						if Rect2i(0, 0, IMAGE_SIZE, IMAGE_SIZE).has_point(where):
-							current_image.set_pixelv(where, selected_color)
+					if current_tool == Tool.BRUSH:
 						for d: Vector2i in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
 							var p := where + d
 							if Rect2i(0, 0, IMAGE_SIZE, IMAGE_SIZE).has_point(p):
 								current_image.set_pixelv(p, selected_color)
 					_update_canvas_image()
+			
+			if event is InputEventMouseMotion:
+				if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+					var from := Vector2(_canvas_to_pixel(event.position - event.relative))
+					var to := Vector2(_canvas_to_pixel(event.position))
+					var n := maxi(absi(to.x - from.x), absi(to.y - from.y))
+					for i: int in n + 1:
+						var where := Vector2i(from.lerp(to, float(i) / float(n)).round())
+						if Rect2i(0, 0, IMAGE_SIZE, IMAGE_SIZE).has_point(where):
+							current_image.set_pixelv(where, selected_color)
+						if current_tool == Tool.BRUSH:
+							for d: Vector2i in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
+								var p := where + d
+								if Rect2i(0, 0, IMAGE_SIZE, IMAGE_SIZE).has_point(p):
+									current_image.set_pixelv(p, selected_color)
+					_update_canvas_image()
 		
 		Tool.BUCKET:
 			if event is InputEventMouseButton:
 				if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+					_push_history()
 					var where := _canvas_to_pixel(event.position)
 					var inside := current_image.get_pixelv(where)
 					if inside == selected_color:
@@ -245,6 +237,14 @@ func _on_canvas_gui_input(event: InputEvent) -> void:
 								stack.append(pp)
 					_update_canvas_image()
 
+func _push_history():
+	undo_history.append(current_image.duplicate())
+
+func _undo():
+	if undo_history.is_empty():
+		return
+	current_image = undo_history.pop_back()
+	_update_canvas_image()
 
 func _update_canvas_image() -> void:
 	(canvas.texture as ImageTexture).update(current_image)
@@ -266,3 +266,9 @@ func _on_bucket_tool_button_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			current_tool = Tool.BUCKET
+
+
+func _on_undo_button_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			_undo()

@@ -19,7 +19,8 @@ func grade(img: Image) -> float:
 	var count := 0
 	for y in s.y:
 		for x in s.x:
-			color_counts[img.get_pixel(x, y)] += 1
+			if img.get_pixel(x, y) != Color(0, 0, 0, 0):
+				color_counts[img.get_pixel(x, y)] += 1
 	return 1 if color_counts.values().all(func(x): x > 24) else -1
 
 func _get_color() -> Color:

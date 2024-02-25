@@ -17,6 +17,13 @@ var requests: Array[Script] = [
 	preload("res://requests/rainbow.gd"),
 ]
 
+var request_sfx := [
+	preload("res://sfx/animalSounds1.wav"),
+	preload("res://sfx/animalSounds2.wav"),
+	preload("res://sfx/animalSounds3.wav"),
+]
+@onready var audio_player := $AudioStreamPlayer
+
 var squareScene = preload("res://UI/pixel_square.tscn")
 @onready var request_label: RichTextLabel = %RequestLabel
 @onready var canvas: TextureRect = %Canvas
@@ -145,6 +152,8 @@ func final_submission():
 
 func next_request() -> void:
 	undo_history.clear()
+	audio_player.stream = request_sfx.pick_random()
+	audio_player.play()
 	if request_num == 0:
 		request_history.clear()
 		current_subject = available_subjects.pick_random()

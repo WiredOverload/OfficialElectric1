@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c623e0kfysjid"]
+[gd_scene load_steps=15 format=3 uid="uid://c623e0kfysjid"]
 
 [ext_resource type="Script" path="res://scenes/gameplay.gd" id="1_7m2p3"]
 [ext_resource type="Texture2D" uid="uid://2puskrrfbs7r" path="res://npc.png" id="2_2xktd"]
@@ -35,6 +35,14 @@ region = Rect2(0, 16, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_5hf1t"]
 atlas = ExtResource("4_erw3r")
 region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hobmn"]
+atlas = ExtResource("4_erw3r")
+region = Rect2(0, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwn5u"]
+atlas = ExtResource("4_erw3r")
+region = Rect2(16, 48, 16, 16)
 
 [node name="Gameplay" type="Node2D"]
 script = ExtResource("1_7m2p3")
@@ -196,7 +204,7 @@ texture_filter = 1
 offset_left = 5.0
 offset_top = 159.0
 offset_right = 77.0
-offset_bottom = 307.0
+offset_bottom = 637.0
 
 [node name="ToolBorder" type="PanelContainer" parent="ToolsContainer"]
 layout_mode = 2
@@ -252,7 +260,27 @@ custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = SubResource("AtlasTexture_5hf1t")
 
+[node name="ToolBorder4" type="PanelContainer" parent="ToolsContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_type_variation = &"PanelBorderOff"
+
+[node name="UndoButton" type="PanelContainer" parent="ToolsContainer/ToolBorder4"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Base" type="TextureRect" parent="ToolsContainer/ToolBorder4/UndoButton"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = SubResource("AtlasTexture_hobmn")
+
+[node name="Color" type="TextureRect" parent="ToolsContainer/ToolBorder4/UndoButton"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = SubResource("AtlasTexture_wwn5u")
+
 [connection signal="pressed" from="VBoxContainer/SubmitButton" to="." method="_on_submit_button_pressed"]
 [connection signal="gui_input" from="ToolsContainer/ToolBorder/PencilToolButton" to="." method="_on_pencil_tool_button_gui_input"]
 [connection signal="gui_input" from="ToolsContainer/ToolBorder3/BrushToolButton" to="." method="_on_brush_tool_button_gui_input"]
 [connection signal="gui_input" from="ToolsContainer/ToolBorder2/BucketToolButton" to="." method="_on_bucket_tool_button_gui_input"]
+[connection signal="gui_input" from="ToolsContainer/ToolBorder4/UndoButton" to="." method="_on_undo_button_gui_input"]

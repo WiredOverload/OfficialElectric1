@@ -5,4 +5,4 @@ func get_text() -> String:
 
 
 func _get_color() -> Color:
-	return Color.BLUE
+	return Palette.BLUE

@@ -47,6 +47,7 @@ var current_request
 var request_num := 0
 var request_target_num := 10 + 1
 var satisfaction := 0
+var last_satisfaction := 1
 
 var available_subjects := [
 	"a man with a hat",
@@ -56,12 +57,20 @@ var available_subjects := [
 	"your fursona",
 ]
 
-var starting_phrases := [
+var positive_starting_phrases := [
 	"That looks great, but ",
 	"Fantastic work, but ",
 	"Great! Now ",
 	"Alright, now ",
-	"Hmmmm, ",
+	"I like it, but ",
+]
+
+var negative_starting_phrases := [
+	"Well, okay, but ",
+	"I guess that works, but ",
+	"That wasn't what I had in mind, but ",
+	"Not sure you captured my vision, but ",
+	"I guess that's not [wave]horrible[/wave], ",
 ]
 
 # Called when the node enters the scene tree for the first time.
@@ -106,13 +115,17 @@ func get_image() -> Image:
 func start_request() -> void:
 	var script: Script = requests.pick_random()
 	current_request = script.new()
-	request_label.text = starting_phrases.pick_random() + current_request.get_text()
+	if last_satisfaction > 0:
+		request_label.text = positive_starting_phrases.pick_random() + current_request.get_text()
+	else:
+		request_label.text = negative_starting_phrases.pick_random() + current_request.get_text()
 	request_label.visible_ratio = 0.0
 	create_tween().tween_property(request_label, "visible_ratio", 1.0, 1.0 / TEXT_SPEED)
 
 func grade_submission() -> void:
 	assert(current_request)
-	satisfaction += current_request.grade(get_image())
+	last_satisfaction = current_request.grade(get_image())
+	satisfaction += last_satisfaction
 	#var score = current_request.grade(get_image())
 	#$PlaceholderScoreLabel.text = str(roundi(score * 100))
 

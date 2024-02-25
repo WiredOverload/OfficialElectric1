@@ -18,6 +18,7 @@ var requests: Array[Script] = [
 	preload("res://requests/night_sky.gd"),
 	preload("res://requests/more_rats.gd"),
 	preload("res://requests/more_twitter.gd"),
+	preload("res://requests/mirror.gd"),
 ]
 
 var request_sfx := [

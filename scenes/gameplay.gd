@@ -14,6 +14,7 @@ var requests: Array[Script] = [
 	preload("res://requests/more_green.gd"),
 	preload("res://requests/more_blue.gd"),
 	preload("res://requests/frame_it.gd"),
+	preload("res://requests/rainbow.gd"),
 ]
 
 var squareScene = preload("res://UI/pixel_square.tscn")

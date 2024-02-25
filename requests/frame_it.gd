@@ -7,12 +7,12 @@ func grade(img: Image) -> float:
 	var s := img.get_size()
 	var streaks := []
 	var colors := {}
-	var current_color := Color.TRANSPARENT
+	var current_color := [Color.TRANSPARENT]
 	var add := func add(x: int, y: int):
 		var c := img.get_pixel(0, y)
-		if c != current_color:
+		if c != current_color[0]:
 			streaks.append(0)
-			current_color = c
+			current_color[0] = c
 		streaks[-1] += 1
 		colors[c] = colors.get(c, 0) + 1
 	for y in range(0, s.y):

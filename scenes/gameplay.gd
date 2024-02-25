@@ -17,6 +17,7 @@ var requests: Array[Script] = [
 	preload("res://requests/rainbow.gd"),
 	preload("res://requests/night_sky.gd"),
 	preload("res://requests/more_rats.gd"),
+	preload("res://requests/more_twitter.gd"),
 ]
 
 var request_sfx := [

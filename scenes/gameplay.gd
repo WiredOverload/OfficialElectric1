@@ -76,13 +76,13 @@ var positive_starting_phrases := [
 	"That looks great, but ",
 	"Fantastic work, but ",
 	"Great! Now ",
-	"Alright, now ",
+	"Alright cool, now ",
 	"I like it, but ",
 ]
 
 var negative_starting_phrases := [
 	"Well, okay, but ",
-	"I guess that works, but ",
+	"Well, I guess that works, but ",
 	"That wasn't what I had in mind, but ",
 	"Not sure you captured my vision, but ",
 	"I guess that's not [wave]horrible[/wave], ",
@@ -145,15 +145,15 @@ func grade_submission() -> void:
 	#$PlaceholderScoreLabel.text = str(roundi(score * 100))
 
 func final_submission():
-	request_label.text = "Well, not sure that still looks like " + current_subject + (
+	request_label.text = ("Well, not sure that still looks like " + current_subject + (
 		", but that's probably because you kept ignoring my suggestions." if satisfaction < 0 else 
 		", but I'm glad you liked all my ideas!")
+		+ "\nSatisfaction: " + str(((satisfaction + ((request_target_num - 1.0) / 2.0)) / (request_target_num - 1.0)) * 100.0) + "%!")
 	request_label.visible_ratio = 0.0
 	create_tween().tween_property(request_label, "visible_ratio", 1.0, 1.0 / TEXT_SPEED)
 	$VBoxContainer/SubmitButton.text = "Restart"
 
 func next_request() -> void:
-	undo_history.clear()
 	audio_player.stream = request_sfx.pick_random()
 	audio_player.play()
 	if request_num == 0:
@@ -171,6 +171,7 @@ func next_request() -> void:
 		grade_submission()
 		start_request()
 	request_num += 1
+	undo_history.clear()
 
 func set_selected_color(c: Color) -> void:
 	palette_rects[Palette.color_name(selected_color)].get_parent().theme_type_variation = &"PanelBorderOff"

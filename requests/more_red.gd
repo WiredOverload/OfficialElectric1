@@ -8,7 +8,7 @@ func grade(img: Image, history: Array[Image]) -> float:
 	var count := 0
 	for y in s.y:
 		for x in s.x:
-			if history.back().get_pixel(x, y) == _get_color() && img.get_pixel(x, y) != _get_color():
+			if img.get_pixel(x, y) == _get_color() && history.back().get_pixel(x, y) != _get_color():
 				count += 1
 	#return 1 if (float(count) / float(s.x * s.y)) > .3 else -1
 	return 1 if count > 24 else -1

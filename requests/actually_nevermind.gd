@@ -10,5 +10,5 @@ func grade(img: Image, history: Array[Image]) -> float:
 	
 	var diff := ImageDiff.diff(img, history[-2])
 	
-	return clampf(float(50 - diff.size()) / 50.0, 0.0, 1.0)
+	return clampf(float(50 - diff.size()) / 50.0, -1.0, 1.0)
 	

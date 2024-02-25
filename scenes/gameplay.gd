@@ -188,7 +188,7 @@ func _on_palette_gui_input(event: InputEvent, palette_rect: ColorRect) -> void:
 			selected_color = palette_rect.color
 
 func _on_submit_button_pressed() -> void:
-	if request_num == request_target_num:
+	if request_num == request_target_num + 1:
 		get_tree().reload_current_scene()
 	else:
 		next_request()

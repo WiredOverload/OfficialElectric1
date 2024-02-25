@@ -16,7 +16,6 @@ func grade(img: Image, old: Image) -> float:
 	}
 	
 	var s := img.get_size()
-	var count := 0
 	var pixel
 	for y in s.y:
 		for x in s.x:

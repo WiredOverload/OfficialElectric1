@@ -151,7 +151,7 @@ func final_submission():
 	request_label.text = ("Well, not sure that still looks like " + current_subject + (
 		", but that's probably because you kept ignoring my suggestions." if satisfaction < 0 else 
 		", but I'm glad you liked all my ideas!")
-		+ "\nSatisfaction: " + str(((satisfaction + ((request_target_num - 1.0) / 2.0)) / (request_target_num - 1.0)) * 100.0) + "%!")
+		+ "\nSatisfaction: " + str((((satisfaction / 2.0) + ((request_target_num - 1.0) / 2.0)) / (request_target_num - 1.0)) * 100.0) + "%!")
 	request_label.visible_ratio = 0.0
 	create_tween().tween_property(request_label, "visible_ratio", 1.0, 1.0 / TEXT_SPEED)
 	$VBoxContainer/SubmitButton.text = "Restart"

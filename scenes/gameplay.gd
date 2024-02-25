@@ -28,6 +28,7 @@ var request_sfx := [
 var squareScene = preload("res://UI/pixel_square.tscn")
 @onready var request_label: RichTextLabel = %RequestLabel
 @onready var canvas: TextureRect = %Canvas
+@onready var fancy_effects: Control = %FancyEffects
 
 @onready var palette_rects := {
 	RED = %PaletteRed,
@@ -194,6 +195,8 @@ func _on_palette_gui_input(event: InputEvent, palette_rect: ColorRect) -> void:
 			selected_color = palette_rect.color
 
 func _on_submit_button_pressed() -> void:
+	if freeze_input:
+		return
 	if request_num == request_target_num + 1:
 		get_tree().reload_current_scene()
 	else:
@@ -217,7 +220,9 @@ func _on_canvas_gui_input(event: InputEvent) -> void:
 						for d: Vector2i in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
 							var p := where + d
 							if Rect2i(0, 0, IMAGE_SIZE, IMAGE_SIZE).has_point(p):
-								current_image.set_pixelv(p, selected_color)
+								if current_image.get_pixelv(p) != selected_color:
+									current_image.set_pixelv(p, selected_color)
+									fancy_effects.add_drip(p, selected_color)
 					_update_canvas_image()
 			
 			if event is InputEventMouseMotion:
@@ -233,7 +238,9 @@ func _on_canvas_gui_input(event: InputEvent) -> void:
 							for d: Vector2i in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
 								var p := where + d
 								if Rect2i(0, 0, IMAGE_SIZE, IMAGE_SIZE).has_point(p):
-									current_image.set_pixelv(p, selected_color)
+									if current_image.get_pixelv(p) != selected_color:
+										current_image.set_pixelv(p, selected_color)
+										fancy_effects.add_drip(p, selected_color)
 					_update_canvas_image()
 		
 		Tool.BUCKET:
@@ -294,6 +301,8 @@ func _on_bucket_tool_button_gui_input(event: InputEvent) -> void:
 
 
 func _on_undo_button_gui_input(event: InputEvent) -> void:
+	if freeze_input:
+		return
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			_undo()

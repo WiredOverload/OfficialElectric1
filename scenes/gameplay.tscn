@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c623e0kfysjid"]
+[gd_scene load_steps=13 format=3 uid="uid://c623e0kfysjid"]
 
 [ext_resource type="Script" path="res://scenes/gameplay.gd" id="1_7m2p3"]
 [ext_resource type="Texture2D" uid="uid://2puskrrfbs7r" path="res://npc.png" id="2_2xktd"]
@@ -19,6 +19,14 @@ region = Rect2(0, 0, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_sce5a"]
 atlas = ExtResource("4_erw3r")
 region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sabet"]
+atlas = ExtResource("4_erw3r")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ti2ui"]
+atlas = ExtResource("4_erw3r")
+region = Rect2(16, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_y0cye"]
 atlas = ExtResource("4_erw3r")
@@ -208,6 +216,24 @@ custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = SubResource("AtlasTexture_sce5a")
 
+[node name="ToolBorder3" type="PanelContainer" parent="ToolsContainer"]
+layout_mode = 2
+theme_type_variation = &"PanelBorderOff"
+
+[node name="BrushToolButton" type="PanelContainer" parent="ToolsContainer/ToolBorder3"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Base" type="TextureRect" parent="ToolsContainer/ToolBorder3/BrushToolButton"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = SubResource("AtlasTexture_sabet")
+
+[node name="Color" type="TextureRect" parent="ToolsContainer/ToolBorder3/BrushToolButton"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = SubResource("AtlasTexture_ti2ui")
+
 [node name="ToolBorder2" type="PanelContainer" parent="ToolsContainer"]
 layout_mode = 2
 theme_type_variation = &"PanelBorderOff"
@@ -228,4 +254,5 @@ texture = SubResource("AtlasTexture_5hf1t")
 
 [connection signal="pressed" from="VBoxContainer/SubmitButton" to="." method="_on_submit_button_pressed"]
 [connection signal="gui_input" from="ToolsContainer/ToolBorder/PencilToolButton" to="." method="_on_pencil_tool_button_gui_input"]
+[connection signal="gui_input" from="ToolsContainer/ToolBorder3/BrushToolButton" to="." method="_on_brush_tool_button_gui_input"]
 [connection signal="gui_input" from="ToolsContainer/ToolBorder2/BucketToolButton" to="." method="_on_bucket_tool_button_gui_input"]

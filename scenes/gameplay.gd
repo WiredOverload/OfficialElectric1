@@ -64,6 +64,8 @@ var request_target_num := 10 + 1
 var satisfaction := 0
 var last_satisfaction := 1
 
+var freeze_input := false
+
 var available_subjects := [
 	"a man with a hat",
 	"a fluffy cat",
@@ -128,6 +130,7 @@ func get_image() -> Image:
 	return current_image
 
 func start_request() -> void:
+	request_history.append(current_image.duplicate())
 	var script: Script = requests.pick_random()
 	current_request = script.new()
 	if last_satisfaction > 0:
@@ -199,6 +202,9 @@ func _canvas_to_pixel(canvas_coord: Vector2) -> Vector2i:
 	return Vector2i(canvas_coord / canvas.size * Vector2(IMAGE_SIZE, IMAGE_SIZE))
 
 func _on_canvas_gui_input(event: InputEvent) -> void:
+	if freeze_input:
+		return
+	
 	match current_tool:
 		Tool.PENCIL, Tool.BRUSH:
 			if event is InputEventMouseButton:
@@ -232,22 +238,28 @@ func _on_canvas_gui_input(event: InputEvent) -> void:
 		Tool.BUCKET:
 			if event is InputEventMouseButton:
 				if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-					_push_history()
 					var where := _canvas_to_pixel(event.position)
 					var inside := current_image.get_pixelv(where)
 					if inside == selected_color:
 						return
+					_push_history()
+					freeze_input = true
 					var stack := [where]
+					await get_tree().physics_frame
 					while not stack.is_empty():
-						var p: Vector2i = stack.pop_back()
-						if current_image.get_pixelv(p) != inside:
-							continue
-						current_image.set_pixelv(p, selected_color)
-						for d: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-							var pp := p + d
-							if Rect2i(0, 0, IMAGE_SIZE, IMAGE_SIZE).has_point(pp):
-								stack.append(pp)
-					_update_canvas_image()
+						var tmp := stack
+						stack = []
+						for p: Vector2i in tmp:
+							if current_image.get_pixelv(p) != inside:
+								continue
+							current_image.set_pixelv(p, selected_color)
+							for d: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+								var pp := p + d
+								if Rect2i(0, 0, IMAGE_SIZE, IMAGE_SIZE).has_point(pp):
+									stack.append(pp)
+						_update_canvas_image()
+						await get_tree().physics_frame
+					freeze_input = false
 
 func _push_history():
 	undo_history.append(current_image.duplicate())

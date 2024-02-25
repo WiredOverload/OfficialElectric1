@@ -10,5 +10,5 @@ func grade(img: Image) -> float:
 		for x in s.x:
 			if img.get_pixel(x, y) == Color.RED:
 				count += 1
-	return float(count) / float(s.x * s.y) / 0.5 # half red = 100%
+	return 1 if (float(count) / float(s.x * s.y)) > .3 else -1
 

@@ -103,6 +103,7 @@ layout_mode = 2
 text = "Submit"
 
 [node name="PlaceholderScoreLabel" type="Label" parent="."]
+visible = false
 offset_left = 987.0
 offset_top = 10.0
 offset_right = 1144.0

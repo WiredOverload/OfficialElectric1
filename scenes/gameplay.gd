@@ -17,6 +17,7 @@ var current_subject := ""
 var current_request
 var request_num := 0
 var request_target_num := 10 + 1
+var satisfaction := 0
 
 var available_subjects := [
 	"a man with a hat",
@@ -82,11 +83,13 @@ func start_request() -> void:
 
 func grade_submission() -> void:
 	assert(current_request)
-	var score = current_request.grade(get_image())
-	$PlaceholderScoreLabel.text = str(roundi(score * 100))
+	satisfaction += current_request.grade(get_image())
+	#var score = current_request.grade(get_image())
+	#$PlaceholderScoreLabel.text = str(roundi(score * 100))
 
 func final_submission():
-	request_label.text = "Yep, that sure is " + current_subject
+	request_label.text = "Yep, that sure is " + current_subject + ".\n" + (
+		"You were terrible to work with though" if satisfaction < 0 else "I'm glad you liked all my ideas!")
 	request_label.visible_ratio = 0.0
 	create_tween().tween_property(request_label, "visible_ratio", 1.0, 1.0 / TEXT_SPEED)
 	$VBoxContainer/SubmitButton.text = "Restart"

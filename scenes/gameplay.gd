@@ -116,8 +116,6 @@ var negative_starting_phrases := [
 	"Oops, you must have misunderstood me, ha ha!\n*" ,
 	"I guess I asked for too a little too much...\n*",
 	"So, that's not quite what I had in mind.\n*",
-	"Err... nevermind. How about we do this, instead?\n*",
-	"Ah... Well, uh... I-- Actually... ",
 ]
 
 # Called when the node enters the scene tree for the first time.

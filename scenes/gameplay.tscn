@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c623e0kfysjid"]
+[gd_scene load_steps=18 format=3 uid="uid://c623e0kfysjid"]
 
 [ext_resource type="Script" path="res://scenes/gameplay.gd" id="1_7m2p3"]
 [ext_resource type="Texture2D" uid="uid://2puskrrfbs7r" path="res://npc.png" id="2_2xktd"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scenes/fancy_effects.gd" id="3_07huu"]
 [ext_resource type="Texture2D" uid="uid://42nfy8b44drv" path="res://tools.png" id="4_erw3r"]
 [ext_resource type="AudioStream" uid="uid://bohlpgp56dsqm" path="res://sfx/animalSounds2.wav" id="5_6yjqv"]
+[ext_resource type="AudioStream" uid="uid://dvuivrmt31uvb" path="res://sfx/Pencil3.wav" id="7_la23j"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sqs6t"]
 texture = ExtResource("2_jr151")
@@ -290,6 +291,11 @@ texture = SubResource("AtlasTexture_wwn5u")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_6yjqv")
+
+[node name="PencilSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_la23j")
+volume_db = -80.0
+autoplay = true
 
 [connection signal="pressed" from="VBoxContainer/SubmitButton" to="." method="_on_submit_button_pressed"]
 [connection signal="gui_input" from="ToolsContainer/ToolBorder/PencilToolButton" to="." method="_on_pencil_tool_button_gui_input"]

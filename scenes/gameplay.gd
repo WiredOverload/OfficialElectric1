@@ -39,6 +39,7 @@ var squareScene = preload("res://UI/pixel_square.tscn")
 @onready var request_label: RichTextLabel = %RequestLabel
 @onready var canvas: TextureRect = %Canvas
 @onready var fancy_effects: Control = %FancyEffects
+@onready var pencil_sfx: AudioStreamPlayer = $PencilSFX
 
 @onready var palette_rects := {
 	RED = %PaletteRed,
@@ -133,6 +134,8 @@ func _ready() -> void:
 	
 	#start_request()
 
+func _process(delta: float) -> void:
+	pencil_sfx.volume_db = linear_to_db(db_to_linear(pencil_sfx.volume_db) - delta / 0.2)
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey:
@@ -250,6 +253,7 @@ func _on_canvas_gui_input(event: InputEvent) -> void:
 			if event is InputEventMouseButton:
 				if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 					_push_history()
+					pencil_sfx.volume_db = linear_to_db(1.0)
 					var where := _canvas_to_pixel(event.position)
 					current_image.set_pixelv(where, selected_color)
 					if current_tool == Tool.BRUSH:
@@ -263,6 +267,7 @@ func _on_canvas_gui_input(event: InputEvent) -> void:
 			
 			if event is InputEventMouseMotion:
 				if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+					pencil_sfx.volume_db = linear_to_db(1.0)
 					var from := Vector2(_canvas_to_pixel(event.position - event.relative))
 					var to := Vector2(_canvas_to_pixel(event.position))
 					var n := maxi(absi(to.x - from.x), absi(to.y - from.y))

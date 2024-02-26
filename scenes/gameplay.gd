@@ -10,16 +10,17 @@ enum Tool {
 }
 
 var requests: Array[Script] = [
-	preload("res://requests/more_red.gd"),
-	preload("res://requests/more_green.gd"),
-	preload("res://requests/more_blue.gd"),
-	preload("res://requests/frame_it.gd"),
-	preload("res://requests/rainbow.gd"),
-	preload("res://requests/night_sky.gd"),
-	preload("res://requests/more_rats.gd"),
-	preload("res://requests/more_twitter.gd"),
-	preload("res://requests/mirror.gd"),
-	preload("res://requests/actually_nevermind.gd"),
+	#preload("res://requests/more_red.gd"),
+	#preload("res://requests/more_green.gd"),
+	#preload("res://requests/more_blue.gd"),
+	#preload("res://requests/frame_it.gd"),
+	#preload("res://requests/rainbow.gd"),
+	#preload("res://requests/night_sky.gd"),
+	#preload("res://requests/more_rats.gd"),
+	#preload("res://requests/more_twitter.gd"),
+	#preload("res://requests/mirror.gd"),
+	#preload("res://requests/actually_nevermind.gd"),
+	preload("res://requests/more_christian.gd"),
 ]
 
 var request_sfx := [

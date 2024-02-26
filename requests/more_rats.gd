@@ -4,16 +4,6 @@ func get_text() -> String:
 	return "can you make it more rat-like?"
 
 func grade(img: Image, history: Array[Image]) -> float:
-	var color_counts := {
-		Palette.RED: 0,
-		Palette.BLUE: 0,
-		Palette.BROWN: 0,
-		Palette.GREEN: 0,
-		Palette.MAGENTA: 0,
-		#Palette.BLACK: 0,
-		#Palette.WHITE: 0,
-		Palette.YELLOW: 0,
-	}
 	
 	var s := img.get_size()
 	var diff_count := 0

@@ -28,6 +28,6 @@ func grade(img: Image, history: Array[Image]) -> float:
 		streaks.pop_back()
 	
 	var score := 0.0
-	score += 0.5 if streaks.min() > 10 else 0.0
-	score += 0.5 if streaks.size() < 5 else 0.0
+	score += 0.5 if streaks.min() > 10 else -0.5
+	score += 0.5 if streaks.size() < 5 else -0.5
 	return score

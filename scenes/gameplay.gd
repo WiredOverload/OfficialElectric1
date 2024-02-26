@@ -71,7 +71,7 @@ var request_history: Array[Image]
 var current_subject := ""
 var current_request
 var request_num := 0
-var request_target_num := 10 + 1
+var request_target_num := 12 + 1
 var satisfaction := 0
 var last_satisfaction := 1
 

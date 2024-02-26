@@ -23,7 +23,7 @@ func add_drip(where: Vector2i, color: Color) -> void:
 	if randi_range(0, 2) < 2:
 		return
 	drips.append({
-		start = (Vector2(where) + Vector2(0.5, 1.0)) / Vector2(24, 24) * size,
+		start = (Vector2(where) + Vector2(randf_range(0.1, 0.9), 1.0)) / Vector2(24, 24) * size,
 		color = color,
 		length = 1.0,
 		speed = randf_range(1.0, 35.0),

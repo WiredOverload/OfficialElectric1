@@ -10,17 +10,21 @@ enum Tool {
 }
 
 var requests: Array[Script] = [
-	#preload("res://requests/more_red.gd"),
-	#preload("res://requests/more_green.gd"),
-	#preload("res://requests/more_blue.gd"),
-	#preload("res://requests/frame_it.gd"),
-	#preload("res://requests/rainbow.gd"),
-	#preload("res://requests/night_sky.gd"),
-	#preload("res://requests/more_rats.gd"),
-	#preload("res://requests/more_twitter.gd"),
-	#preload("res://requests/mirror.gd"),
-	#preload("res://requests/actually_nevermind.gd"),
+	preload("res://requests/actually_nevermind.gd"),
+	preload("res://requests/frame_it.gd"),
+	preload("res://requests/horse.gd"),
+	preload("res://requests/make_it_louder.gd"),
+	preload("res://requests/mirror.gd"),
+	preload("res://requests/more_blue.gd"),
 	preload("res://requests/more_christian.gd"),
+	preload("res://requests/more_green.gd"),
+	preload("res://requests/more_rats.gd"),
+	preload("res://requests/more_red.gd"),
+	preload("res://requests/more_twitter.gd"),
+	preload("res://requests/night_sky.gd"),
+	preload("res://requests/no_rats.gd"),
+	preload("res://requests/rainbow.gd"),
+	preload("res://requests/sign_it.gd"),
 ]
 
 var request_sfx := [
@@ -28,6 +32,7 @@ var request_sfx := [
 	preload("res://sfx/animalSounds2.wav"),
 	preload("res://sfx/animalSounds3.wav"),
 ]
+
 @onready var audio_player := $AudioStreamPlayer
 
 var squareScene = preload("res://UI/pixel_square.tscn")
@@ -75,9 +80,16 @@ var freeze_input := false
 var available_subjects := [
 	"a man with a hat",
 	"a fluffy cat",
-	"the Mona Lisa",
-	"a cool tech giant logo",
 	"your fursona",
+	"a cute witch",
+	"an anime girl",
+	"a friendly shark",
+	"a brave dog",
+	"The King in Yellow",
+	"a scenic landscape",
+	"a waterfall",
+	"yourself",
+	"delicious food",
 ]
 
 var positive_starting_phrases := [
@@ -86,14 +98,26 @@ var positive_starting_phrases := [
 	"Great! Now ",
 	"Alright cool, now ",
 	"I like it, but ",
+	"Love it. *",
+	"Fantastic. *",
+	"Mathematical! *",
+	"Stunning... ",
+	"Chuffed to see it!\n*",
 ]
 
 var negative_starting_phrases := [
 	"Well, okay, but ",
-	"Well, I guess that works, but ",
-	"That wasn't what I had in mind, but ",
-	"Not sure you captured my vision, but ",
+	"Well, I guess that works...\n*",
+	"That wasn't what I had in mind, so ",
+	"Not sure you captured my vision, ",
 	"I guess that's not [wave]horrible[/wave], ",
+	"I, uh, appreciate the effort, however... ",
+	"Jeez... Lets try something else.\n*",
+	"Oops, you must have misunderstood me, ha ha!\n*" ,
+	"I guess I asked for too a little too much...\n*",
+	"So, that's not quite what I had in mind.\n*",
+	"Err... nevermind. How about we do this, instead?\n*",
+	"Ah... Well, uh... I-- Actually... ",
 ]
 
 # Called when the node enters the scene tree for the first time.
@@ -143,10 +167,14 @@ func start_request() -> void:
 		return r.can_be_picked(request_history)
 	).pick_random()
 	current_request = script.new()
+	var concat := func concat(s: String, t: String) -> String:
+		if s.ends_with("*"):
+			return s.trim_suffix("*") + t.substr(0, 1).capitalize() + t.substr(1)
+		return s + t
 	if last_satisfaction > 0:
-		request_label.text = positive_starting_phrases.pick_random() + current_request.get_text()
+		request_label.text = concat.call(positive_starting_phrases.pick_random(), current_request.get_text())
 	else:
-		request_label.text = negative_starting_phrases.pick_random() + current_request.get_text()
+		request_label.text = concat.call(negative_starting_phrases.pick_random(), current_request.get_text())
 	request_label.visible_ratio = 0.0
 	create_tween().tween_property(request_label, "visible_ratio", 1.0, 1.0 / TEXT_SPEED)
 
